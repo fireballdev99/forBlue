@@ -10,9 +10,9 @@ app.use(express.json());
 const db = mysql.createConnection({
     user: "root",
     host: "localhost",
-    password: "root999",
-    database: "employeeSystem",
-});
+    password: "",
+    database: "ops",
+}, console.log("connect to db ops"));
 
 // insert contact
 app.post("/creatcontact", (req, res) => {
@@ -33,5 +33,5 @@ app.post("/creatcontact", (req, res) => {
 
 // Setting Port
 app.listen(3001, () => {
-    console.log("Yey, your server is running on port 3001");
+    console.log("Server is running on port 3001");
 });
