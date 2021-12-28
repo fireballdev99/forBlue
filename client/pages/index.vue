@@ -310,7 +310,9 @@
           และวันหยุดนักขัตฤกษ์)
         </p>
 
-        <b-button type="submit" variant="primary">Submit</b-button>
+        <b-button type="submit" variant="primary" @click="refresh"
+          >Submit</b-button
+        >
         <b-button type="reset" variant="danger">Reset</b-button>
       </b-form>
       <b-card class="mt-3" header="Form Data Result">
@@ -446,15 +448,32 @@ export default {
     },
     onReset(event) {
       event.preventDefault()
-      // Reset our form values
+      // Reset All Value
       this.contact.compname = ''
       this.contact.taxid = ''
       this.contact.name = ''
       this.contact.tel = ''
       this.contact.address = ''
-
-      // Trick to reset/clear native browser form validation state
-      this.show = false
+      this.payment.bankname = ''
+      this.payment.accname = ''
+      this.payment.acctype = ''
+      this.payment.accno = ''
+      this.payment.accbranch = ''
+      this.coordinate.name = ''
+      this.coordinate.email = ''
+      this.coordinate.tel = ''
+      this.finance.name = ''
+      this.finance.email = ''
+      this.finance.tel = ''
+      this.details.registerfee = ''
+      this.details.systemfee = ''
+      this.details.registerstart = ''
+      this.details.registerend = ''
+      this.details.paymentstart = ''
+      this.details.paymentend = ''(
+        // Trick to reset/clear native browser form validation state
+        (this.show = false)
+      )
       this.$nextTick(() => {
         this.show = true
       })
