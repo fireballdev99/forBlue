@@ -81,6 +81,25 @@ app.post("/createfinance", (req, res) => {
     })
 })
 
+// insert detail
+app.post('/createdetail', (req, res) => {
+    const taxid = req.body.taxid
+    const registerfee = req.body.registerfee
+    const systemfee = req.body.systemfee
+    const registerstart = req.body.registerstart
+    const registerend = req.body.registerend
+    const paymentstart = req.body.paymentstart
+    const paymentend = req.body.paymentend
+
+    db.query("INSERT INTO detail (taxid, registerfee, systemfee, registerstart, registerend, paymentstart, paymentend) VALUES (?, ?, ?, ?, ?, ?, ?)", [taxid, registerfee, systemfee, registerstart, registerend, paymentstart, paymentend], (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            res.send("Datail inserted")
+        }
+    })
+})
+
 // Setting Port
 app.listen(3001, () => {
     console.log("Server is running on port 3001");

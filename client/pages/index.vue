@@ -180,12 +180,144 @@
           ></b-form-input>
         </b-form-group>
 
+        <!-- เงื่อนไขและรายละเอียดบริการ -->
+        <h3>เงื่อนไขและรายละเอียดบริการ</h3>
+
+        <b-form-group
+          id="fee"
+          label="ค่าธรรมเนียมการสมัคร/สอบ:"
+          label-for="fee"
+        >
+          <b-form-input
+            id="fee"
+            type="number"
+            v-model="details.registerfee"
+            required
+          ></b-form-input>
+        </b-form-group>
+        <!-- fee system -->
+        <b-form-group
+          id="system-fee"
+          label="ค่าธรรมเนียมระบบ:"
+          label-for="system-fee"
+        >
+          <b-form-input
+            id="system-fee"
+            type="number"
+            v-model="details.systemfee"
+            required
+          ></b-form-input>
+        </b-form-group>
+        <!-- Row for date -->
+        <h4>ระยะเวลาเปิดรับสมัคร</h4>
+        <b-row>
+          <!-- start date -->
+
+          <b-col
+            ><label for="start-date">ตั้งแต่วันที่</label>
+            <b-input-group class="mb-3">
+              <b-form-input
+                id="start-date"
+                v-model="details.registerstart"
+                type="text"
+                placeholder="YYYY-MM-DD"
+                autocomplete="off"
+              ></b-form-input>
+              <b-input-group-append>
+                <b-form-datepicker
+                  v-model="details.registerstart"
+                  button-only
+                  right
+                  locale="en-US"
+                  aria-controls="start-date"
+                ></b-form-datepicker>
+              </b-input-group-append> </b-input-group
+          ></b-col>
+          <!-- End date -->
+          <b-col
+            ><label for="end-date">จนถึงวันที่:</label>
+            <b-input-group class="mb-3">
+              <b-form-input
+                id="end-date"
+                v-model="details.registerend"
+                type="text"
+                placeholder="YYYY-MM-DD"
+                autocomplete="off"
+              ></b-form-input>
+              <b-input-group-append>
+                <b-form-datepicker
+                  v-model="details.registerend"
+                  button-only
+                  right
+                  locale="en-US"
+                  aria-controls="end-date"
+                ></b-form-datepicker>
+              </b-input-group-append> </b-input-group
+          ></b-col>
+        </b-row>
+
+        <!-- Row for payment -->
+        <h4>ระยะเวลาชำระเงิน</h4>
+        <b-row>
+          <!-- start date -->
+
+          <b-col
+            ><label for="payment-start">ตั้งแต่วันที่</label>
+            <b-input-group class="mb-3">
+              <b-form-input
+                id="payment-start"
+                v-model="details.paymentstart"
+                type="text"
+                placeholder="YYYY-MM-DD"
+                autocomplete="off"
+              ></b-form-input>
+              <b-input-group-append>
+                <b-form-datepicker
+                  v-model="details.paymentstart"
+                  button-only
+                  right
+                  locale="en-US"
+                  aria-controls="payment-start"
+                ></b-form-datepicker>
+              </b-input-group-append> </b-input-group
+          ></b-col>
+          <!-- End date -->
+          <b-col
+            ><label for="payment-end">จนถึงวันที่:</label>
+            <b-input-group class="mb-3">
+              <b-form-input
+                id="payment-ende"
+                v-model="details.paymentend"
+                type="text"
+                placeholder="YYYY-MM-DD"
+                autocomplete="off"
+              ></b-form-input>
+              <b-input-group-append>
+                <b-form-datepicker
+                  v-model="details.paymentend"
+                  button-only
+                  right
+                  locale="en-US"
+                  aria-controls="payment-end"
+                ></b-form-datepicker>
+              </b-input-group-append> </b-input-group
+          ></b-col>
+        </b-row>
+        <p style="">
+          *การโอนเงินคืน : บริษัทฯ จะทําการตัดรอบการรับชําระเงินทุกวัน
+          และดําเนินการโอนเงินคืนไปยังบัญชีที่แจ้ง ภายใน 3
+          วันทําการนับจากวันที่ตัดยอด (ไม่รวมวันหยุดเสาร์-อาทิตย์
+          และวันหยุดนักขัตฤกษ์)
+        </p>
+
         <b-button type="submit" variant="primary">Submit</b-button>
         <b-button type="reset" variant="danger">Reset</b-button>
       </b-form>
       <b-card class="mt-3" header="Form Data Result">
         <pre class="m-0"
-          >{{ contact }},{{ payment }},{{ coordinate }},{{ finance }}</pre
+          >{{ contact }},{{ payment }},{{ coordinate }},{{ finance }},{{
+            details
+          }}</pre
         >
       </b-card>
     </b-container>
@@ -197,6 +329,14 @@ import axios from 'axios'
 export default {
   data() {
     return {
+      details: {
+        registerfee: '',
+        systemfee: '',
+        registerstart: '',
+        registerend: '',
+        paymentstart: '',
+        paymentend: '',
+      },
       contact: {
         compname: '',
         taxid: '',
@@ -227,8 +367,6 @@ export default {
   methods: {
     async onSubmit(event) {
       event.preventDefault()
-      alert(JSON.stringify(this.contact))
-      console.log(this.contact.compname)
       // Post contact
       await axios
         .post('http://localhost:3001/createcontact', {
@@ -281,6 +419,23 @@ export default {
           name: this.finance.name,
           email: this.finance.email,
           tel: this.finance.tel,
+        })
+        .then((response) => {
+          console.log(response)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+      // Post Detail
+      await axios
+        .post('http://localhost:3001/createdetail', {
+          taxid: this.contact.taxid,
+          registerfee: this.details.registerfee,
+          systemfee: this.details.systemfee,
+          registerstart: this.details.registerstart,
+          registerend: this.details.registerend,
+          paymentstart: this.details.paymentstart,
+          paymentend: this.details.paymentend,
         })
         .then((response) => {
           console.log(response)
